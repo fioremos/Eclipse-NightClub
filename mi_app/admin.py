@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SolicitudConsulta, RegistroReserva, RegistroConsulta, RegistroEvento
+from .models import SolicitudConsulta, RegistroReserva, RegistroConsulta, RegistroEvento, UsuarioPermitido
 
 
 class BaseSolicitudAdmin(admin.ModelAdmin):
@@ -43,6 +43,13 @@ class RegistroConsultaAdmin(BaseSolicitudAdmin):
 class RegistroEventoAdmin(BaseSolicitudAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).filter(tipo_consulta_cliente='evento')
+
+
+@admin.register(UsuarioPermitido)
+class UsuarioPermitidoAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'email', 'codigo_validation')
+    search_fields = ('nombre', 'email', 'codigo_validation')
+    ordering = ('nombre',)
 
 admin.site.site_header = "Eclipse Night Club — Panel de Control"
 admin.site.site_title = "Eclipse Admin"

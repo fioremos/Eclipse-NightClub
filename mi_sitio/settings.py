@@ -126,7 +126,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'no-reply@eclipsenightclub.com'
 
-AUTHENTICATION_BACKENDS = ['mi_app.backends.EmailBackend']
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend','mi_app.backends.EmailBackend']
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

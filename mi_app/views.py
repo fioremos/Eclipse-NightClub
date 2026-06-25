@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import requests
@@ -109,6 +110,7 @@ def eventos(request):
     ]
     return render(request, 'mi_app/eventos.html', {'lista_eventos': data})
 
+
 def registro_view(request):
     paso = request.session.get('registro_paso', 1)
 
@@ -142,11 +144,13 @@ def registro_view(request):
                     )
 
                     messages.info(request, "Le llegará un correo para validar su cuenta.")
-                    return redirect('registro')
+
+                    form_paso2 = ValidacionCodigoForm()
+                    return render(request, 'registration/registro.html', {'form': form_paso2, 'paso': 2})
 
                 except UsuarioPermitido.DoesNotExist:
                     messages.error(request, "Acceso restringido. No está autorizado a utilizar este sistema.")
-                    return redirect('registro')
+                    return render(request, 'registration/registro.html', {'form': form_paso1, 'paso': 1})
 
             return render(request, 'registration/registro.html', {'form': form_paso1, 'paso': 1})
 
@@ -168,6 +172,7 @@ def registro_view(request):
                             user.first_name = datos_iniciales.get('first_name')
                             user.last_name = datos_iniciales.get('last_name')
                             user.email = email
+                            user.set_password(datos_iniciales.get('password'))
                             user.save()
 
                             request.session.pop('datos_registro', None)

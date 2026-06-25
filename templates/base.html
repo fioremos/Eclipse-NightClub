@@ -18,6 +18,7 @@
     {% include 'header.html' %}
 
     <main>
+        {% block content %}{% endblock %}
         {% if messages %}
             <div class="messages-container">
                 {% for message in messages %}
@@ -27,7 +28,6 @@
                 {% endfor %}
             </div>
         {% endif %}
-        {% block content %}{% endblock %}
     </main>
 
     {% include 'footer.html' %}
