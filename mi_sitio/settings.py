@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,14 +77,11 @@ WSGI_APPLICATION = 'mi_sitio.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Eclipse',
-        'USER': 'postgres',
-        'PASSWORD': '40540369',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config (
+        default='postgresql://simulador_automotriz_user:P6v3CUn7Nk7RPmLXMvtjKUBEYJFGYfZm@dpg-d8qa61vavr4c73877q7g-a.virginia-postgres.render.com/simulador_automotriz',
+        conn_max_age=600,
+        ssl_require=True,
+    )
 }
 
 # Password validation

@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from mi_app import views
+from . import create_superuser
 
 urlpatterns = [
     path('', include('mi_app.urls')),

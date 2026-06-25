@@ -2,8 +2,13 @@ services:
   - type: web
     name: proyectoDjango
     env: python
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    buildCommand: |
+      pip install -r requirements.txt &&
+      python manage.py migrate &&
+      python manage.py collectstatic --noinput"
     startCommand: "gunicorn mi_sitio.wsgi:application"
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: mi_sitio.settings
+      - key: DATABASE_URL
+        value: postgresql://simulador_automotriz_user:P6v3CUn7Nk7RPmLXMvtjKUBEYJFGYfZm@dpg-d8qa61vavr4c73877q7g-a.virginia-postgres.render.com/simulador_automotriz
