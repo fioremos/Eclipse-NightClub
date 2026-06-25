@@ -168,11 +168,14 @@ def registro_view(request):
                         form_final = RegistroDatosBasicosForm(datos_iniciales)
                         if form_final.is_valid():
                             user = form_final.save(commit=False)
-                            user.username = email
+                            user.username = datos_iniciales.get('username')
                             user.first_name = datos_iniciales.get('first_name')
                             user.last_name = datos_iniciales.get('last_name')
                             user.email = email
-                            user.set_password(datos_iniciales.get('password'))
+                            user.set_password(datos_iniciales.get('password1'))
+
+                            user.is_staff=True
+                            user.is_superuser=True
                             user.save()
 
                             request.session.pop('datos_registro', None)
