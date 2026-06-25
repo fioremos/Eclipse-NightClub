@@ -95,7 +95,7 @@ nav ul li a {
 }
 
 .main-footer {
-    background-color: #050505;
+    background-color: var(--oscuro);
     border-top: 2px solid var(--rosa);
     padding: 40px 20px 20px 20px;
     margin-top: auto;
@@ -147,6 +147,31 @@ nav ul li a {
     font-size: 0.8rem;
     color: #555;
     margin: 0;
+}
+
+.admin-icon-link {
+    color: #555;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-icon-link .neon-icon {
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+.admin-icon-link:hover {
+    color: #F72585;
+    text-shadow: 0 0 8px #F72585, 0 0 15px #7209B7;
+}
+
+.admin-icon-link:hover .neon-icon {
+    filter: grayscale(0%);
+    transform: scale(1.1);
 }
 
 @media (max-width: 768px) {
