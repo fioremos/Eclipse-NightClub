@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-e#+)qbmw4e1z(au5720a1y_o&zd%v4iv=u)+9sk$%+m)1o0kxi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['eclipse-nightclub.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'eclipse-nightclub.onrender.com']
 
 
 # Application definition

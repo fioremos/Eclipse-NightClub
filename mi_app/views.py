@@ -45,8 +45,16 @@ def contacto(request):
         form = ContactoForm(request.POST)
 
         if form.is_valid():
+            nueva_solicitud = SolicitudConsulta(
+                nombre_completo=form.cleaned_data.get('nombre_completo'),
+                correo_electronico=form.cleaned_data.get('correo_electronico'),
+                tipo_consulta_cliente=form.cleaned_data.get('tipo_consulta_cliente'),
+                mensaje=form.cleaned_data.get('mensaje'),
+                fecha_reserva=form.cleaned_data.get('fecha_reserva'),
+                cantidad_personas=form.cleaned_data.get('cantidad_personas')
+            )
             form.save()
-            categoria_actual = form.categoria_asignada
+            categoria_actual = nueva_solicitud.categoria_asignada
             cuerpo_mensaje = f"""
                     Hola Anna,
 
@@ -79,7 +87,7 @@ def contacto(request):
                 print(f"Error al enviar mail al administrador: {e}")
                 messages.success(request, "¡Tu solicitud fue recibida correctamente!")
 
-            return redirect('inicio')
+            return redirect('contacto')
     else:
         form = ContactoForm()
     return render(request, 'mi_app/contacto.html', {'form': form})
