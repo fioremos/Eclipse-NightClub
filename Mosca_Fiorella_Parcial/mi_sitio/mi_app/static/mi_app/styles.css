@@ -1,0 +1,488 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.hero {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.hero-content {
+    max-width: 37.5rem;
+    width: 100%;
+}
+
+.title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(4rem, 10vw, 10rem);
+    color: white;
+    line-height: 1;
+    text-shadow: 0 0 1rem var(--rosa);
+}
+
+.subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(1.2rem, 2vw, 3rem);
+    letter-spacing: 0.3em;
+    color: white;
+    margin-top: 1rem;
+}
+
+.hero-buttons {
+    margin: 2rem 0 4rem;
+}
+
+.btn-neon {
+    background: var(--rosa);
+    color: white;
+    padding: 0.8rem 2rem;
+    border: none;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2.5rem;
+    cursor: pointer;
+    border-radius: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 0 10px var(--rosa),
+        0 0 20px var(--rosa),
+        0 0 40px var(--rosa);
+}
+
+.btn-neon:hover {
+    transform: scale(1.05);
+    box-shadow:
+        0 0 20px var(--rosa),
+        0 0 40px var(--rosa),
+        0 0 60px var(--rosa);
+}
+
+.featured-events h2 {
+    color: var(--violeta);
+    font-size: clamp(3rem, 6vw, 7rem);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.events-container {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    padding: 2rem;
+    flex-wrap: wrap;
+}
+
+.event-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.event-circle-img {
+    width: clamp(14rem, 20vw, 25rem);
+    height: clamp(14rem, 20vw, 25rem);
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--violeta);
+    box-shadow: 0 0 25px var(--violeta);
+    margin-bottom: 1rem;
+    transition: all 0.4s ease;
+}
+
+.event-circle-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.event-circle-img:hover img {
+    transform: scale(1.1);
+}
+
+.event-card h3 {
+    color: var(--rosa);
+    font-size: clamp(2rem, 4vw, 4rem);
+}
+
+.event-card p {
+    font-size: clamp(1rem, 2vw, 2rem);
+}
+
+.contact-container {
+    background-color: var(--oscuro);
+    color: white;
+    padding: 60px 10%;
+    min-height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.main-title {
+    font-family: 'Bebas Neue', cursive;
+    color: var(--rosa);
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 50px;
+    letter-spacing: 2px;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 2fr 0.5fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+input, select, textarea,
+input[type="text"], input[type="email"], input[type="number"], input[type="date"] {
+    width: 100%;
+    background-color: transparent;
+    border: 2px solid var(--violeta);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    outline: none;
+    box-shadow: 0 0 10px rgba(157, 78, 221, 0.2);
+}
+
+option {
+    background-color: var(--oscuro);
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--violeta);
+    box-shadow: 0 0 0.5rem var(--violeta);
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-group.small {
+    flex: 1;
+}
+
+.form-section {
+    padding: 5rem;
+}
+
+.btn-submit {
+    background-color: var(--rosa);
+    color: white;
+    border: none;
+    padding: 0.7rem 2rem;
+    border-radius: 2.2rem;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: block;
+    margin: 5rem auto 0;
+    box-shadow: 0 0 20px var(--rosa);
+    transition: transform 0.2s;
+}
+
+.btn-submit:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.info-section {
+    border-left: 2px solid var(--rosa);
+    padding-left: 40px;
+}
+
+.info-block {
+    margin-bottom: 1.45rem;
+}
+
+.info-block h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.info-block p {
+    color: white;
+    line-height: 1.5;
+}
+
+.gallery-page {
+    text-align: center;
+}
+
+.gallery-title {
+    font-family: 'Bebas Neue', cursive;
+    color: var(--violeta);
+    font-size: 3.5rem;
+    margin-bottom: 1.6rem;
+}
+
+.gallery-grid {
+    column-count: 4;
+}
+
+.gallery-item {
+    display: inline-block;
+    overflow: hidden;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+}.
+
+.events-page {
+    padding: 3.33rem 10%;
+    min-height: 100vh;
+}
+
+.events-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.event-card-full {
+    display: flex;
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid var(--violeta);
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.event-card-full:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px var(--violeta);
+}
+
+.event-date {
+    background: var(--violeta);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1.5rem;
+    font-family: 'Bebas Neue', cursive;
+    min-width: 100px;
+}
+
+.event-date .day { font-size: 3rem; line-height: 1; }
+.event-date .month { font-size: 1.2rem; }
+
+.event-image {
+    width: 15rem;
+    height: 10rem;
+}
+
+.event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.event-time {
+    margin: 1rem
+}
+
+.event-info {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.event-name {
+    font-family: 'Bebas Neue', cursive;
+    color: var(--rosa);
+    font-size: 2.2rem;
+    margin: 0;
+}
+
+.event-genre {
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0.4rem;
+}
+
+.event-description {
+    font-size: 0.9rem;
+    font-weight: lighter;
+    color: white;
+    line-height: 1.4;
+    margin-bottom: 0.6rem;
+}
+
+.btn-neon-small {
+    background: transparent;
+    border: 1px solid var(--rosa);
+    color: var(--rosa);
+    padding: 0.33rem 0.6rem;
+    text-decoration: none;
+    font-family: 'Bebas Neue';
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn-neon-small:hover {
+    background: var(--rosa);
+    color: white;
+    box-shadow: 0 0 10px var(--rosa);
+}
+
+.zoom-modal {
+    display: none;
+    position: fixed;
+    z-index: 999999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(13, 13, 13, 0.95);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    max-width: 85%;
+    max-height: 85%;
+    border: 2px solid var(--neon-purple);
+    box-shadow: 0 0 30px var(--neon-purple);
+}
+
+.close-btn {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        min-height: 60vh;
+    }
+
+    .btn-neon {
+        font-size: 2rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-neon {
+        font-size: 1.5rem;
+    }
+
+    .gallery-grid {
+        column-count: 3;
+    }
+
+    label[for="personas"] {
+    font-size: 0;
+  }
+
+  label[for="personas"]::after {
+    content: "Personas";
+    font-size: 0.5rem;
+  }
+
+  .event-card-full { flex-direction: column; }
+    .event-image { width: 100%; }
+    .event-date { padding: 0.6rem; flex-direction: row; gap: 0.25rem; }
+}
+
+@media (max-width: 468px) {
+
+    .contact-container, .gallery-page {
+        padding: 2rem 5%;
+    }
+
+    .main-title, .gallery-title {
+        font-size: 2.5rem !important;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+        font-size: 3rem !important;
+    }
+
+    .hero-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        align-items: center;
+    }
+
+    .events-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .gallery-grid {
+        column-count: 1;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .info-section {
+        border-left: none;
+        border-top: 2px solid var(--rosa);
+        padding-left: 0;
+        padding-top: 1.5rem;
+        text-align: center;
+    }
+
+    input, select, textarea {
+        font-size: 0.5rem;
+        padding: 0.5rem;
+    }
+
+    .btn-submit {
+        width: 100%;
+        font-size: 1.2rem;
+    }
+
+    label[for="personas"] {
+    font-size: 0.5rem;
+  }
+
+  label[for="personas"]::after {
+    content: "";
+  }
+
+}

@@ -1,0 +1,247 @@
+.eclipse-container {
+    text-align: center;
+    padding: 50px;
+    color: #ffffff;
+    font-family: sans-serif;
+}
+
+.divider {
+    border-color: #333333;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.admin-box {
+    background: #1a1a1e;
+    border: 1px solid #4CAF50;
+    padding: 15px;
+    max-width: 400px;
+    margin: 20px auto;
+    border-radius: 6px;
+}
+
+.admin-text {
+    color: #4CAF50;
+    margin-top: 0;
+}
+
+.btn-admin {
+    background: #4CAF50;
+    color: #ffffff;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.info-text {
+    color: #aaaaaa;
+    font-size: 0.9rem;
+}
+
+.logout-form {
+    margin-top: 30px;
+}
+
+.btn-logout {
+    background: #333333;
+    color: #ff5555;
+    border: 1px solid #ff5555;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.btn-logout:hover {
+    background: #ff5555;
+    color: #ffffff;
+}
+
+.denied-title {
+    color: #ff5555;
+}
+
+.login-link {
+    color: #F72585;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+.auth-container {
+    max-width: 400px;
+    margin: 50px auto;
+    background: #121214;
+    padding: 30px;
+    border-radius: 8px;
+    border: 2px solid #F72585;
+    color: #ffffff;
+    font-family: sans-serif;
+    box-shadow: 0 0 15px rgba(247, 37, 133, 0.2);
+}
+
+.auth-title {
+    color: #F72585;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.auth-message {
+    color: #ffb703;
+    text-align: center;
+    font-weight: 500;
+}
+
+.django-form-p p {
+    margin-bottom: 15px;
+}
+
+.django-form-p label {
+    display: block;
+    margin-bottom: 5px;
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.django-form-p input {
+    width: 100%;
+    padding: 8px;
+    background: #1a1a1e;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.django-form-p input:focus {
+    border-color: #F72585;
+    outline: none;
+}
+
+.btn-submit {
+    width: 100%;
+    background: #F72585;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-submit:hover {
+    background: #b5179e;
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+
+.auth-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.register-link {
+    color: #4CC9F0;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+.auth-container.staff-variant {
+    max-width: 500px;
+    margin: 50px auto;
+    background: #121214;
+    padding: 30px;
+    border-radius: 8px;
+    border: 2px solid #7209B7;
+    color: #ffffff;
+    font-family: sans-serif;
+    box-shadow: 0 0 15px rgba(114, 9, 183, 0.2);
+}
+
+.auth-title.staff-title {
+    color: #4CC9F0;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.django-form-p p {
+    margin-bottom: 15px;
+}
+
+.django-form-p label {
+    display: block;
+    margin-bottom: 5px;
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.django-form-p input {
+    width: 100%;
+    padding: 8px;
+    background: #1a1a1e;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.django-form-p input:focus {
+    border-color: #4CC9F0;
+    outline: none;
+}
+
+.btn-submit.staff-btn {
+    width: 100%;
+    background: #7209B7;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-submit.staff-btn:hover {
+    background: #560bad;
+}
+
+.btn-submit.staff-btn:active {
+    transform: scale(0.98);
+}
+
+.auth-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.login-link {
+    color: #F72585;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'mi_app/styles.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<main class="events-page">
+    <header class="events-header">
+        <h1 class="main-title">LINE UP & EVENTOS</h1>
+        <p class="subtitle">PREPÁRATE PARA LA EXPERIENCIA ECLIPSE</p>
+    </header>
+
+    <section class="events-list">
+        {% for item in eventos %}
+        <article class="event-card-full">
+            <div class="event-date">
+                <span class="day">✨</span>
+                <span class="month">LIVE</span>
+            </div>
+
+            <div class="event-image">
+                {% if item.show.image.medium %}
+                    <img alt="{{ item.show.name }}" src="{{ item.show.image.medium }}">
+                {% else %}
+                    <div style="width: 100%; height: 100%; background: #222; display: flex; align-items: center; justify-content: center; color: #666;">🎬</div>
+                {% endif %}
+            </div>
+
+            <div class="event-info">
+                <h2 class="event-name">{{ item.show.name }}</h2>
+
+                <p class="event-genre">
+                    {% for genero in item.show.genres %}
+                        {{ genero }}{% if not forloop.last %} / {% endif %}
+                    {% empty %}
+                        Festival / Shows
+                    {% endfor %}
+                </p>
+
+                <p class="event-description">
+                    Transmisión original en idioma {{ item.show.language }}. Estado actual del show: {{ item.show.status }}.
+                </p>
+                <div class="event-footer">
+                    <span class="event-time">START: 23:00 HS</span>
+                    <a class="btn-neon-small" href="{% url 'contacto' %}">RESERVAR LUGAR</a>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <p class="no-events">No hay eventos programados por el momento. ¡Vuelve pronto!</p>
+        {% endfor %}
+        </div>
+
+    </section>
+</main>
+{% endblock %}

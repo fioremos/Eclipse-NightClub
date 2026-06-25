@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'mi_app/styles.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'mi_app/script.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<main class="contact-section" id="contacto">
+    <h1 class="main-title">RESERVAS Y CONSULTAS</h1>
+
+    <div class="contact-grid">
+        <section class="form-section">
+            <form action="" id="form-consulta" method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo</label>
+                    {{ form.nombre_completo }}
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    {{ form.correo_electronico }}
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo">Tipo de Consulta</label>
+                    {{ form.tipo_consulta_cliente }}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group small">
+                        <label for="fecha">Fecha de Reserva</label>
+                        {{ form.fecha_reserva }}
+                    </div>
+                    <div class="form-group small">
+                        <label for="personas">Cantidad de Personas</label>
+                        {{ form.cantidad_personas }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="mensaje">Mensaje</label>
+                    {{ form.mensaje }}
+                </div>
+
+                <button class="btn-submit" type="submit">ENVIAR CONSULTA</button>
+            </form>
+        </section>
+
+        <aside class="info-section">
+            <div class="info-block">
+                <h3>Ubicación</h3>
+                <p>223 Road, Cama Rad,<br>Eclipse, Cobora</p>
+            </div>
+
+            <div class="info-block">
+                <h3>Telefono</h3>
+                <p>(800) 2345-6789</p>
+            </div>
+
+            <div class="info-block">
+                <h3>Horario</h3>
+                <p>Domardo a horaras<br>8:30 a 2:00 p.m.</p>
+            </div>
+
+            <div class="info-block">
+                <h3>Social Media</h3>
+                <div class="social-links">
+                    <p><i class="fa-brands fa-facebook social-icon fb"></i> EclipseNightclub</p>
+                    <p><i class="fa-brands fa-instagram social-icon ig"></i> EclipseNightclub</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+</main>
+
+{% endblock %}

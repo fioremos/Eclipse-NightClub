@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'mi_app/styles.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'mi_app/script.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<main class="gallery-page">
+    <h1 class="gallery-title">GALERÍA DE LA NOCHE</h1>
+
+    <section class="gallery-grid">
+        {% for imagen in lista_imagenes %}
+        <div class="gallery-item">
+                <img alt="Imagen1" onclick="abrirZoom(this)" src="{% static imagen.url %}">
+        </div>
+        {% endfor %}
+    </section>
+    <div class="zoom-modal" id="custom-modal" onclick="cerrarZoom()">
+        <span class="close-btn">&times;</span>
+        <img alt="Zoom" class="modal-content" id="modal-img">
+    </div>
+</main>
+{% endblock %}

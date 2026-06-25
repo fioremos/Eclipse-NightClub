@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'mi_app/admin.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container staff-variant">
+    <h2 class="auth-title staff-title">Crear Cuenta de Personal</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="django-form-p">
+            {# Esto va a renderizar Nombre, Apellido, Email, Código y las Contraseñas #}
+            {{ form.as_p }}
+        </div>
+
+        <button class="btn-submit staff-btn" type="submit">
+            Confirmar Registro
+        </button>
+    </form>
+
+    {% if messages %}
+    <div class="messages-container" style="margin-bottom: 20px; text-align: center;">
+        {% for message in messages %}
+        <p class="auth-message"
+           style="color: {% if message.tags == 'error' %}#ff5555{% else %}#ffb703{% endif %}; font-weight: bold;">
+            {{ message }}
+        </p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <p class="auth-footer">
+        ¿Ya tenés un usuario? <a class="login-link" href="{% url 'login' %}">Iniciá sesión</a>
+    </p>
+</div>
+{% endblock %}

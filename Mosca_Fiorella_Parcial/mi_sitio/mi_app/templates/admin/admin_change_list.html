@@ -1,0 +1,15 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'mi_app/admin_stats.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% if totales %}
+        {% include "admin/mi_resumen.html" %}
+    {% endif %}
+
+    {{ block.super }}
+{% endblock %}

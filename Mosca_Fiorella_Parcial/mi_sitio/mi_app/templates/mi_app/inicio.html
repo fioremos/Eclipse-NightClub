@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'mi_app/styles.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section id="inicio" class="hero">
+    <div class="hero-content">
+        <p class="title">LA NOCHE ES NUESTRA</p>
+        <p class="subtitle">
+            Sumérgete en la mejor música electrónica de la ciudad.
+            Una experiencia sensorial única con los mejores DJs internacionales.
+        </p>
+        <div class="hero-buttons">
+            <a href="{% url 'contacto' %}" class="btn-neon">COMPRA TUS ENTRADAS</a>
+        </div>
+    </div>
+</section>
+
+<section class="featured-events">
+    <h2>PRÓXIMOS EVENTOS</h2>
+
+    <div class="events-container">
+        <div class="event-card">
+            <div class="event-circle-img">
+                <img src="{% static 'imagenes/dj1.png' %}" alt="DJ Set">
+            </div>
+            <div class="date-badge">22 FEB</div>
+            <h3>JONATHAN ALVEZ</h3>
+            <p>Techno & Progressive House</p>
+        </div>
+
+        <div class="event-card">
+            <div class="event-circle-img">
+                <img src="{% static 'imagenes/dj2.png' %}" alt="Night Party">
+            </div>
+            <div class="date-badge">01 MAR</div>
+            <h3>NEON DREAMS</h3>
+            <p>Special Guest: Sara Moon</p>
+        </div>
+
+        <div class="event-card">
+            <div class="event-circle-img">
+                <img src="{% static 'imagenes/dj3.png' %}" alt="Clubbing">
+            </div>
+            <div class="date-badge">15 MAR</div>
+            <h3>ECLIPSE FEST</h3>
+            <p>Anniversary Celebration</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

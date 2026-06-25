@@ -1,0 +1,236 @@
+:root {
+    --oscuro: #0D0D0D;
+    --rosa: #F72585;
+    --violeta: #9D4EDD;
+    --rosa-claro: #EA7CC8;
+    --violeta-claro: #E29CEF;
+}
+
+body {
+    background-color: var(--oscuro);
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: absolute;
+  width: 16rem;
+  height: 16rem;
+  border-radius: 50%;
+  filter: blur(5rem);
+  opacity: 0.6;
+  z-index: -1;
+}
+
+body::before {
+  background: var(--rosa);
+  top: 10%;
+  left: 20%;
+}
+
+body::after {
+  background: var(--violeta);
+  bottom: 10%;
+  right: 20%;
+}
+
+h1, h2, h3 {
+    font-family: 'Bebas Neue', cursive;
+}
+
+.main-header h1 {
+    text-align: center;
+    font-size: 6rem;
+    font-weight: normal;
+    color: var(--oscuro);
+    margin: 0;
+    line-height: 1;
+
+    text-shadow:
+        0 0 4px var(--violeta),
+        0 0 10px var(--violeta-claro),
+        0 0 18px var(--violeta),
+        0 0 35px var(--violeta),
+        0 0 70px var(--violeta),
+        0 0 100px var(--violeta);
+}
+
+.main-header h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: normal;
+    color: var(--rosa);
+    margin-top: 10px;
+
+    text-shadow:
+       0 0 4px var(--rosa),
+        0 0 10px var(--rosa),
+        0 0 15px var(--rosa),
+        0 0 30px var(--rosa),
+        0 0 60px var(--rosa);
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: transparent;
+    align-items: center;
+}
+
+nav ul { display: flex; list-style: none; padding-inline-start: 0px }
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    margin-left: 1rem;
+    font-family: 'Bebas Neue', serif;
+    font-size: 2rem;
+    letter-spacing: 1px;
+
+}
+
+.main-footer {
+    background-color: #050505;
+    border-top: 2px solid var(--rosa);
+    padding: 40px 20px 20px 20px;
+    margin-top: auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+.footer-logo {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.footer-logo span {
+    color: var(--violeta);
+    text-shadow: 0 0 10px var(--violeta);
+}
+
+.footer-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: #888;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.footer-copyright {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 15px;
+    margin-top: 10px;
+}
+
+.footer-copyright p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    color: #555;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+
+    .main-header h1 {
+        font-size: 4.5rem;
+        text-shadow:
+            0 0 3px var(--violeta),
+            0 0 8px var(--violeta-claro),
+            0 0 14px var(--violeta),
+            0 0 25px var(--violeta),
+            0 0 50px var(--violeta);
+    }
+
+    .main-header h2 {
+        font-size: 1.4rem;
+        letter-spacing: 9px;
+        text-indent: 9px;
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 468px) {
+
+    body::before,
+    body::after {
+        width: 10rem;
+        height: 10rem;
+        filter: blur(4rem);
+        opacity: 0.4;
+    }
+
+    body::before {
+        top: 5%;
+        left: 10%;
+    }
+
+    body::after {
+        bottom: 5%;
+        right: 10%;
+    }
+
+    nav {
+       padding: 1.5rem 1rem;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    nav ul li a {
+        font-size: 1.6rem;
+        margin-left: 0;
+    }
+
+    .main-header h1 {
+        font-size: 3.2rem;
+        text-shadow:
+            0 0 3px var(--violeta),
+            0 0 6px var(--violeta-claro),
+            0 0 12px var(--violeta),
+            0 0 20px var(--violeta),
+            0 0 40px var(--violeta);
+    }
+
+    .main-header h2 {
+        font-size: 1rem;
+        letter-spacing: 6px;
+        text-indent: 6px;
+        margin-top: 8px;
+        text-shadow:
+            0 0 3px var(--rosa),
+            0 0 6px var(--rosa),
+            0 0 12px var(--rosa),
+            0 0 25px var(--rosa);
+    }
+
+    .main-footer {
+        padding: 30px 15px 15px 15px;
+    }
+    .footer-logo {
+        font-size: 1.8rem;
+    }
+}

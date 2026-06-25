@@ -1,0 +1,38 @@
+{% load static %}
+{% block extra_css %}
+<link href="{% static 'mi_app/admin.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="eclipse-container">
+    {% if user.is_authenticated %}
+        <h1>¡Bienvenido/a, {{ user.username }}!</h1>
+        <p>Has ingresado correctamente al ecosistema privado de Eclipse Night Club.</p>
+
+        <hr class="divider">
+
+        {% if user.is_staff %}
+            <div class="admin-box">
+                <p class="admin-text">Tu cuenta cuenta con permisos de administración.</p>
+                <a href="/admin/" class="btn-admin">
+                    Ir al Panel de Control (PostgreSQL)
+                </a>
+            </div>
+        {% else %}
+            <p class="info-text">Tu usuario no es administrador (Staff). No podés ingresar al backend.</p>
+        {% endif %}
+
+        <form action="{% url 'logout' %}" method="POST" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="btn-logout">
+                Cerrar Sesión
+            </button>
+        </form>
+
+    {% else %}
+        <h1 class="denied-title">Acceso Denegado</h1>
+        <p>Debes estar logueado para visualizar esta sección de la empresa.</p>
+        <a href="{% url 'login' %}" class="login-link">Ir al inicio de sesión</a>
+    {% endif %}
+</div>
+{% endblock %}

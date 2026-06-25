@@ -1,0 +1,67 @@
+:root {
+    --bg-main: #121214;
+    --bg-card: #1a1a1e;
+    --neon-fucsia: #F72585;
+    --neon-purple: #7209B7;
+    --neon-blue: #4CC9F0;
+    --neon-yellow: #FFB703;
+    --neon-green: #4CAF50;
+    --text-white: #ffffff;
+    --text-muted: #aaaaaa;
+}
+
+.stats-container {
+    background: var(--bg-main);
+    border: 2px solid var(--neon-fucsia);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: var(--text-white);
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 0 10px rgba(247, 37, 133, 0.2);
+}
+
+.stats-title {
+    margin-top: 0;
+    color: var(--neon-fucsia);
+    font-size: 1.2rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 8px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.stat-number {
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+.card-total { border-left: 4px solid var(--neon-purple); }
+.card-comercial { border-left: 4px solid var(--neon-blue); }
+.card-tecnica { border-left: 4px solid var(--neon-yellow); }
+.card-rrhh { border-left: 4px solid var(--neon-fucsia); }
+.card-general { border-left: 4px solid var(--neon-green); }
+
+.num-total { color: var(--text-white); }
+.num-comercial { color: var(--neon-blue); }
+.num-tecnica { color: var(--neon-yellow); }
+.num-rrhh { color: var(--neon-fucsia); }
+.num-general { color: var(--neon-green); }
