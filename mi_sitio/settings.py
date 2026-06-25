@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-e#+)qbmw4e1z(au5720a1y_o&zd%v4iv=u)+9sk$%+m)1o0kxi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['eclipse-nightclub.onrender.com']
 
 
 # Application definition
@@ -122,7 +122,7 @@ LOGOUT_REDIRECT_URL = 'login'
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
