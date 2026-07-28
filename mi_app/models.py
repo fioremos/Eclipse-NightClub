@@ -66,3 +66,16 @@ class RegistroEvento(SolicitudConsulta):
         proxy = True
         verbose_name = "Evento Privado"
         verbose_name_plural = "EVENTOS PRIVADOS"
+
+class ContenidoInicio(models.Model):
+    titulo_principal = models.CharField(max_length=200, default="ECLIPSE NIGHTCLUB")
+    subtitulo = models.CharField(max_length=200, default="LA MEJOR EXPERIENCIA NOCTURNA")
+    texto_bienvenida = models.TextField(default="Bienvenido al club nocturno más exclusivo de la ciudad. Disfruta de la mejor música, DJs en vivo y una atmósfera inigualable.")
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Contenido de Inicio"
+        verbose_name_plural = "Contenido de Inicio"
+
+    def __str__(self):
+        return f"Contenido Inicio (Actualizado: {self.fecha_actualizacion.strftime('%d/%m/%Y %H:%M')})"

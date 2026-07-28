@@ -1,20 +1,31 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.urls import reverse
-from rest_framework.response import Response
-from rest_framework.views import APIView
-import requests
 from django.conf import settings
-from .forms import ContactoForm, RegistroDatosBasicosForm, ValidacionCodigoForm
-from .models import SolicitudConsulta, UsuarioPermitido
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.urls import reverse_lazy
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+import requests
+
+from .forms import ContactoForm, RegistroDatosBasicosForm, ValidacionCodigoForm, ContenidoInicioForm
+from .models import SolicitudConsulta, UsuarioPermitido, ContenidoInicio
 from .serializers import SolicitudConsultaSerializer
 
 
-# Create your views here.
+# --- Vistas Principales del Sitio ---
+
 def inicio(request):
-    return render(request, 'mi_app/inicio.html')
+    contenido, _ = ContenidoInicio.objects.get_or_create(id=1)
+    return render(request, 'mi_app/inicio.html', {'contenido': contenido})
 
 imagenes = [
     {'url': 'imagenes/party.jpg'},
@@ -46,15 +57,7 @@ def contacto(request):
         form = ContactoForm(request.POST)
 
         if form.is_valid():
-            nueva_solicitud = SolicitudConsulta(
-                nombre_completo=form.cleaned_data.get('nombre_completo'),
-                correo_electronico=form.cleaned_data.get('correo_electronico'),
-                tipo_consulta_cliente=form.cleaned_data.get('tipo_consulta_cliente'),
-                mensaje=form.cleaned_data.get('mensaje'),
-                fecha_reserva=form.cleaned_data.get('fecha_reserva'),
-                cantidad_personas=form.cleaned_data.get('cantidad_personas')
-            )
-            form.save()
+            nueva_solicitud = form.save()
             categoria_actual = nueva_solicitud.categoria_asignada
             cuerpo_mensaje = f"""
                     Hola Anna,
@@ -94,22 +97,10 @@ def contacto(request):
     return render(request, 'mi_app/contacto.html', {'form': form})
 
 def eventos(request):
-    data = [
-        {
-            'dia': '22', 'mes': 'FEB', 'nombre': 'TECHNO NIGHT: ALVEZ',
-            'genero': 'Techno / Dark Progressive',
-            'imagen': 'imagenes/dj1.png',
-            'descripcion': 'Una noche inmersiva con los ritmos más potentes del underground.'
-        },
-        {
-            'dia': '01', 'mes': 'MAR', 'nombre': 'NEON VIBES',
-            'genero': 'EDM / House',
-            'imagen': 'imagenes/dj2.png',
-            'descripcion': 'El evento temático más esperado con decoración flúor y shows láser.'
-        },
-    ]
-    return render(request, 'mi_app/eventos.html', {'lista_eventos': data})
+    return render(request, 'mi_app/eventos.html')
 
+
+# --- Vistas de Autenticación ---
 
 def registro_view(request):
     paso = request.session.get('registro_paso', 1)
@@ -138,7 +129,7 @@ def registro_view(request):
                     send_mail(
                         asunto,
                         mensaje,
-                        'no-reply@eclipsenightclub.com',
+                        settings.DEFAULT_FROM_EMAIL,
                         [email_ingresado],
                         fail_silently=False,
                     )
@@ -174,8 +165,8 @@ def registro_view(request):
                             user.email = email
                             user.set_password(datos_iniciales.get('password1'))
 
-                            user.is_staff=True
-                            user.is_superuser=True
+                            user.is_staff = True
+                            user.is_superuser = True
                             user.save()
 
                             request.session.pop('datos_registro', None)
@@ -193,17 +184,6 @@ def registro_view(request):
         form = RegistroDatosBasicosForm()
         return render(request, 'registration/registro.html', {'form': form, 'paso': 1})
 
-
-def lista_eventos_api_view(request):
-
-    url_eventos = "https://api.tvmaze.com/search/shows?q=festival"
-    eventos_api = []
-    response = requests.get(url_eventos, timeout=5)
-    if response.status_code == 200:
-        eventos_api = response.json()[:6]
-
-    return render(request, 'mi_app/eventos.html', {'eventos': eventos_api})
-
 def login_personalizado_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -213,7 +193,7 @@ def login_personalizado_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('dashboard')
         else:
             messages.error(request, "Usuario o contraseña incorrectos.")
     else:
@@ -223,8 +203,104 @@ def login_personalizado_view(request):
 def home_view(request):
     return render(request, 'mi_app/home.html')
 
+
+class PersonalisedPasswordResetView(PasswordResetView):
+    template_name = 'registration/password_reset_form.html'
+    email_template_name = 'registration/password_reset_email.html'
+    subject_template_name = 'registration/password_reset_subject.txt'
+    success_url = reverse_lazy('password_reset_done')
+
+    def form_valid(self, form):
+        email = form.cleaned_data.get('email')
+        if not User.objects.filter(email=email).exists():
+            messages.error(
+                self.request,
+                "El correo electrónico ingresado no se encuentra registrado en nuestro sistema."
+            )
+            return self.form_invalid(form)
+
+        messages.success(self.request, "Te hemos enviado un correo con las instrucciones.")
+        return super().form_valid(form)
+
+# --- Panel de Administración del Cliente ---
+
+@login_required
+def dashboard_admin(request):
+    solicitudes = SolicitudConsulta.objects.all().order_by('-fecha_creacion')
+
+    totales = {
+        'total': solicitudes.count(),
+        'comercial': solicitudes.filter(categoria_asignada='Consulta Comercial').count(),
+        'tecnica': solicitudes.filter(categoria_asignada='Consulta Técnica').count(),
+        'rrhh': solicitudes.filter(categoria_asignada='Consulta de RRHH').count(),
+        'general': solicitudes.filter(categoria_asignada='Consulta General').count(),
+    }
+
+    return render(request, 'admin/dashboard.html', {
+        'solicitudes': solicitudes,
+        'totales': totales
+    })
+
+@login_required
+def editar_consulta(request, pk):
+    consulta = get_object_or_404(SolicitudConsulta, pk=pk)
+    if request.method == 'POST':
+        form = ContactoForm(request.POST, instance=consulta)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Consulta actualizada correctamente.")
+            return redirect('dashboard')
+    else:
+        form = ContactoForm(instance=consulta)
+
+    return render(request, 'admin/editar_consulta.html', {'form': form, 'consulta': consulta})
+
+@login_required
+def eliminar_consulta(request, pk):
+    consulta = get_object_or_404(SolicitudConsulta, pk=pk)
+    if request.method == 'POST':
+        consulta.delete()
+        messages.success(request, "Consulta eliminada exitosamente.")
+        return redirect('dashboard')
+
+    return render(request, 'admin/eliminar_consulta_confirm.html', {'consulta': consulta})
+
+@login_required
+def cms_admin(request):
+    contenido, _ = ContenidoInicio.objects.get_or_create(id=1)
+
+    if request.method == 'POST':
+        form = ContenidoInicioForm(request.POST, instance=contenido)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "¡Contenido de la web actualizado con éxito!")
+            return redirect('cms_admin')
+    else:
+        form = ContenidoInicioForm(instance=contenido)
+
+    return render(request, 'admin/cms_dashboard.html', {
+        'form': form,
+        'contenido': contenido
+    })
+
+
+# --- APIs (Interna y Externa consumida mediante DRF) ---
+
 class ConsultasAPIView(APIView):
+    """API Interna para consultar las solicitudes en formato JSON."""
     def get(self, request):
         consultas = SolicitudConsulta.objects.all().order_by('-fecha_creacion')
         serializer = SolicitudConsultaSerializer(consultas, many=True)
         return Response(serializer.data)
+
+class EventosExternosAPIView(APIView):
+    def get(self, request):
+        url_eventos = "https://api.tvmaze.com/search/shows?q=festival"
+        try:
+            response = requests.get(url_eventos, timeout=5)
+            if response.status_code == 200:
+                data = response.json()[:6]
+                return Response(data, status=status.HTTP_200_OK)
+            return Response({'error': 'No se obtuvieron datos de la API externa'}, status=status.HTTP_502_BAD_GATEWAY)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

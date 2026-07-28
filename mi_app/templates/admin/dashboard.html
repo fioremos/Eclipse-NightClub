@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+<link href="{% static 'mi_app/admin_stats.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+
+    <ul class="admin-tabs mb-4">
+        <li class="admin-tab-item">
+            <a class="admin-tab-link admin-tab-link-active" href="{% url 'dashboard' %}">📊 Gestor de Consultas</a>
+        </li>
+        <li class="admin-tab-item">
+            <a class="admin-tab-link" href="{% url 'cms_admin' %}">✏️ Gestor de Contenidos (CMS)</a>
+        </li>
+    </ul>
+
+    {% include "admin/mi_resumen.html" %}
+
+    <div class="cms-card">
+        <div class="cms-card__header">
+            <div>
+                <p class="edit-card__eyebrow">Panel de consultas</p>
+                <h2 class="cms-card__title">Listado de Consultas</h2>
+            </div>
+        </div>
+
+        <p class="cms-card__text">Revisa, edita y elimina las solicitudes registradas en el sistema.</p>
+
+        <div class="admin-table-shell">
+            <div class="table-responsive">
+                <table class="admin-dashboard-table">
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Categoría</th>
+                        <th>Mensaje</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in solicitudes %}
+                    <tr>
+                        <td data-label="Fecha">{{ item.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                        <td data-label="Nombre">{{ item.nombre_completo }}</td>
+                        <td data-label="Email">{{ item.correo_electronico }}</td>
+                        <td data-label="Categoría">
+                            <span class="badge-pill">{{ item.categoria_asignada }}</span>
+                        </td>
+                        <td data-label="Mensaje">{{ item.mensaje|truncatechars:30 }}</td>
+                        <td data-label="Acciones">
+                            <div class="action-group">
+                                <a class="table-action-btn table-action-btn-edit"
+                                   href="{% url 'editar_consulta' item.pk %}">Editar</a>
+                                <a class="table-action-btn table-action-btn-delete"
+                                   href="{% url 'eliminar_consulta' item.pk %}">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td class="empty-table" colspan="6">No hay consultas registradas en el sistema.</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

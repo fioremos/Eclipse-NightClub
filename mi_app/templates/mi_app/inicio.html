@@ -8,11 +8,11 @@
 {% block content %}
 <section id="inicio" class="hero">
     <div class="hero-content">
-        <p class="title">LA NOCHE ES NUESTRA</p>
+        <p class="title">{{ contenido.titulo_principal }}</p>
         <p class="subtitle">
-            Sumérgete en la mejor música electrónica de la ciudad.
-            Una experiencia sensorial única con los mejores DJs internacionales.
+            {{ contenido.subtitulo }}
         </p>
+        <p class="welcome">{{ contenido.texto_bienvenida }}</p>
         <div class="hero-buttons">
             <a href="{% url 'contacto' %}" class="btn-neon">COMPRA TUS ENTRADAS</a>
         </div>

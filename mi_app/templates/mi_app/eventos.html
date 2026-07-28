@@ -14,46 +14,103 @@
     </header>
 
     <section class="events-list">
-        {% for item in eventos %}
-        <article class="event-card-full">
-            <div class="event-date">
-                <span class="day">✨</span>
-                <span class="month">LIVE</span>
-            </div>
-
-            <div class="event-image">
-                {% if item.show.image.medium %}
-                    <img alt="{{ item.show.name }}" src="{{ item.show.image.medium }}">
-                {% else %}
-                    <div style="width: 100%; height: 100%; background: #222; display: flex; align-items: center; justify-content: center; color: #666;">🎬</div>
-                {% endif %}
-            </div>
-
-            <div class="event-info">
-                <h2 class="event-name">{{ item.show.name }}</h2>
-
-                <p class="event-genre">
-                    {% for genero in item.show.genres %}
-                        {{ genero }}{% if not forloop.last %} / {% endif %}
-                    {% empty %}
-                        Festival / Shows
-                    {% endfor %}
-                </p>
-
-                <p class="event-description">
-                    Transmisión original en idioma {{ item.show.language }}. Estado actual del show: {{ item.show.status }}.
-                </p>
-                <div class="event-footer">
-                    <span class="event-time">START: 23:00 HS</span>
-                    <a class="btn-neon-small" href="{% url 'contacto' %}">RESERVAR LUGAR</a>
-                </div>
-            </div>
-        </article>
-        {% empty %}
-        <p class="no-events">No hay eventos programados por el momento. ¡Vuelve pronto!</p>
-        {% endfor %}
+        <!-- Contenedor dinámico cargado mediante DRF -->
+        <div id="contenedor-eventos" class="w-100">
+            <p class="text-center text-muted py-5">Cargando la experiencia Eclipse...</p>
         </div>
-
     </section>
 </main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("{% url 'api_eventos_externos' %}")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Error en la respuesta del servidor");
+            }
+            return response.json();
+        })
+        .then(data => {
+            const contenedor = document.getElementById("contenedor-eventos");
+            contenedor.innerHTML = "";
+
+            if (!data || data.length === 0) {
+                contenedor.innerHTML = '<p class="no-events">No hay eventos programados por el momento. ¡Vuelve pronto!</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const show = item.show;
+
+                // --- PROCESAMIENTO DE FECHA Y HORA REAL ---
+                let diaTexto = "✨";
+                let mesTexto = "LIVE";
+                let horaTexto = "23:00 HS";
+
+                // Si la API devuelve la fecha de estreno/emisión (formato YYYY-MM-DD)
+                if (show.premiered) {
+                    const fechaObj = new Date(show.premiered);
+                    if (!isNaN(fechaObj.getTime())) {
+                        diaTexto = String(fechaObj.getDate()).padStart(2, '0');
+                        // Mes corto en mayúsculas (ej: JAN, FEB, MAR)
+                        const meses = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+                        mesTexto = meses[fechaObj.getMonth()];
+                    }
+                }
+
+                // Si la API devuelve el horario específico de emisión
+                if (show.schedule && show.schedule.time) {
+                    horaTexto = `${show.schedule.time} HS`;
+                }
+
+                // --- PROCESAMIENTO DE IMAGEN ---
+                const imagenHtml = show.image && show.image.medium
+                    ? `<img alt="${show.name}" src="${show.image.medium}">`
+                    : `<div style="width: 100%; height: 100%; background: #222; display: flex; align-items: center; justify-content: center; color: #666;">🎬</div>`;
+
+                // --- PROCESAMIENTO DE GÉNEROS ---
+                let generosTexto = "Festival / Shows";
+                if (show.genres && show.genres.length > 0) {
+                    generosTexto = show.genres.join(" / ");
+                }
+
+                // Renderizado con tus clases CSS exactas
+                const cardHtml = `
+                    <article class="event-card-full mb-4">
+                        <div class="event-date">
+                            <span class="day">${diaTexto}</span>
+                            <span class="month">${mesTexto}</span>
+                        </div>
+
+                        <div class="event-image">
+                            ${imagenHtml}
+                        </div>
+
+                        <div class="event-info">
+                            <h2 class="event-name">${show.name}</h2>
+
+                            <p class="event-genre">
+                                ${generosTexto}
+                            </p>
+
+                            <p class="event-description">
+                                Transmisión original en idioma ${show.language || 'N/A'}. Estado actual del show: ${show.status || 'Confirmado'}.
+                            </p>
+                            <div class="event-footer">
+                                <span class="event-time">START: ${horaTexto}</span>
+                                <a class="btn-neon-small" href="{% url 'contacto' %}">RESERVAR LUGAR</a>
+                            </div>
+                        </div>
+                    </article>
+                `;
+                contenedor.innerHTML += cardHtml;
+            });
+        })
+        .catch(error => {
+            console.error("Error al cargar la API DRF:", error);
+            const contenedor = document.getElementById("contenedor-eventos");
+            contenedor.innerHTML = '<p class="no-events text-danger">Ocurrió un error al conectar con el servidor de eventos.</p>';
+        });
+});
+</script>
 {% endblock %}

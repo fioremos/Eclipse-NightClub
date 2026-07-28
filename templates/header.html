@@ -1,9 +1,30 @@
 {% load static %}
+{% block extra_js %}
+<script src="{% static 'script.js' %}"></script>
+{% endblock %}
 <header class="main-header">
-    <nav>
-        <h1>Eclipse</h1>
-        <h2>Night Club</h2>
-        <ul>
+    <nav class="nav-container">
+        <div class="brand">
+            <h1>Eclipse</h1>
+            <h2>Night Club</h2>
+        </div>
+
+        {% if user.is_authenticated %}
+                <span class="user-greeting ms-3 badge bg-dark border border-info text-info p-2">
+                    Hola, <strong>{{ user.first_name|default:user.username }}</strong>
+                </span>
+            {% endif %}
+        </div>
+
+        <!-- Botón Hamburguesa para Mobile -->
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+
+        <!-- Lista de enlaces de navegación -->
+        <ul id="nav-links" class="nav-links">
             <li><a href="{% url 'inicio' %}">INICIO</a></li>
             <li><a href="{% url 'eventos' %}">EVENTOS</a></li>
             <li><a href="{% url 'galeria' %}">GALERÍA</a></li>

@@ -16,6 +16,16 @@
                 <span class="neon-icon">🔐</span> <small style="font-size: 0.8rem; letter-spacing: 1px;">STAFF
                 ACCESS</small>
             </a>
+
+            {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post" class="m-0">
+            {% csrf_token %}
+            <button type="submit" class="admin-icon-link logout-icon">
+                <span class="neon-icon">🚪</span> CERRAR SESIÓN
+            </button>
+        </form>
+        {% endif %}
+
         </div>
     </div>
 </footer>

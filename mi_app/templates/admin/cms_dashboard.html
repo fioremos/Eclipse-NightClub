@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mi_app/admin_stats.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <ul class="admin-tabs mb-4">
+        <li class="admin-tab-item">
+            <a class="admin-tab-link" href="{% url 'dashboard' %}">📊 Gestor de Consultas</a>
+        </li>
+        <li class="admin-tab-item">
+            <a class="admin-tab-link admin-tab-link-active" href="{% url 'cms_admin' %}">✏️ Gestor de Contenidos (CMS)</a>
+        </li>
+    </ul>
+
+    <div class="cms-card">
+        <div class="cms-card__header">
+            <div>
+                <p class="edit-card__eyebrow">Panel CMS</p>
+                <h2 class="cms-card__title">Editar Página de Inicio</h2>
+            </div>
+            <a href="{% url 'inicio' %}" target="_blank" class="confirm-btn confirm-btn-secondary">Ver Web Pública</a>
+        </div>
+
+        <p class="cms-card__text">Modifica los textos principales que los usuarios verán en la portada de la web.</p>
+
+        <form method="post" class="cms-form">
+            {% csrf_token %}
+
+            <div class="cms-field">
+                <label for="{{ form.titulo_principal.id_for_label }}">Título Principal</label>
+                {{ form.titulo_principal }}
+            </div>
+
+            <div class="cms-field">
+                <label for="{{ form.subtitulo.id_for_label }}">Subtítulo</label>
+                {{ form.subtitulo }}
+            </div>
+
+            <div class="cms-field">
+                <label for="{{ form.texto_bienvenida.id_for_label }}">Texto / Sección de Bienvenida</label>
+                {{ form.texto_bienvenida }}
+            </div>
+
+            <div class="cms-form__actions">
+                <button type="submit" class="confirm-btn confirm-btn-danger">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

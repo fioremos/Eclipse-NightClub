@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mi_app/admin_stats.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="edit-card">
+        <div class="edit-card__header">
+            <div>
+                <p class="edit-card__eyebrow">Edición de consulta</p>
+                <h2 class="edit-card__title">Editar Consulta de {{ consulta.nombre_completo }}</h2>
+            </div>
+            <a href="{% url 'dashboard' %}" class="edit-card__back">← Volver</a>
+        </div>
+
+        <form method="post" class="edit-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="edit-form__actions">
+                <button type="submit" class="confirm-btn confirm-btn-danger">Guardar Cambios</button>
+                <a href="{% url 'dashboard' %}" class="confirm-btn confirm-btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

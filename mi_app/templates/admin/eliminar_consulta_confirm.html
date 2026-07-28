@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mi_app/admin_stats.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="confirm-card">
+        <div class="confirm-icon">!</div>
+        <h2 class="confirm-title">¿Confirmas que deseas eliminar esta consulta?</h2>
+        <p class="confirm-details">Cliente: <strong>{{ consulta.nombre_completo }}</strong> | Categoría: <strong>{{ consulta.categoria_asignada }}</strong></p>
+        <p class="confirm-warning">Esta acción no se puede deshacer y se eliminará permanentemente el registro.</p>
+
+        <form method="post" class="confirm-actions">
+            {% csrf_token %}
+            <button type="submit" class="confirm-btn confirm-btn-danger">Confirmar Eliminación</button>
+            <a href="{% url 'dashboard' %}" class="confirm-btn confirm-btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

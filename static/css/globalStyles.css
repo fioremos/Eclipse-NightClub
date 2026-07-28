@@ -6,6 +6,7 @@
     --violeta-claro: #E29CEF;
 }
 
+/* Base */
 body {
     background-color: var(--oscuro);
     color: white;
@@ -15,32 +16,33 @@ body {
 
 body::before,
 body::after {
-  content: "";
-  position: absolute;
-  width: 16rem;
-  height: 16rem;
-  border-radius: 50%;
-  filter: blur(5rem);
-  opacity: 0.6;
-  z-index: -1;
+    content: "";
+    position: absolute;
+    width: 16rem;
+    height: 16rem;
+    border-radius: 50%;
+    filter: blur(5rem);
+    opacity: 0.6;
+    z-index: -1;
 }
 
 body::before {
-  background: var(--rosa);
-  top: 10%;
-  left: 20%;
+    background: var(--rosa);
+    top: 10%;
+    left: 20%;
 }
 
 body::after {
-  background: var(--violeta);
-  bottom: 10%;
-  right: 20%;
+    background: var(--violeta);
+    bottom: 10%;
+    right: 20%;
 }
 
 h1, h2, h3 {
     font-family: 'Bebas Neue', cursive;
 }
 
+/* Header */
 .main-header h1 {
     text-align: center;
     font-size: 6rem;
@@ -48,7 +50,6 @@ h1, h2, h3 {
     color: var(--oscuro);
     margin: 0;
     line-height: 1;
-
     text-shadow:
         0 0 4px var(--violeta),
         0 0 10px var(--violeta-claro),
@@ -64,15 +65,15 @@ h1, h2, h3 {
     font-weight: normal;
     color: var(--rosa);
     margin-top: 10px;
-
     text-shadow:
-       0 0 4px var(--rosa),
+        0 0 4px var(--rosa),
         0 0 10px var(--rosa),
         0 0 15px var(--rosa),
         0 0 30px var(--rosa),
         0 0 60px var(--rosa);
 }
 
+/* Navigation */
 nav {
     display: flex;
     flex-direction: column;
@@ -82,7 +83,11 @@ nav {
     align-items: center;
 }
 
-nav ul { display: flex; list-style: none; padding-inline-start: 0px }
+nav ul {
+    display: flex;
+    list-style: none;
+    padding-inline-start: 0px;
+}
 
 nav ul li a {
     color: white;
@@ -91,9 +96,52 @@ nav ul li a {
     font-family: 'Bebas Neue', serif;
     font-size: 2rem;
     letter-spacing: 1px;
-
 }
 
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: relative;
+}
+
+/* Mobile navigation */
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    z-index: 1000;
+}
+
+.hamburger-btn .bar {
+    height: 3px;
+    width: 100%;
+    background-color: var(--rosa);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.hamburger-btn.open .bar:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+    background-color: #ff007f;
+}
+
+.hamburger-btn.open .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-btn.open .bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+    background-color: #ff007f;
+}
+
+/* Footer */
 .main-footer {
     background-color: var(--oscuro);
     border-top: 2px solid var(--rosa);
@@ -149,14 +197,26 @@ nav ul li a {
     margin: 0;
 }
 
+/* Admin link */
 .admin-icon-link {
     color: #555;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 700;
     transition: all 0.3s ease-in-out;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+}
+
+.logout-icon {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .admin-icon-link .neon-icon {
@@ -174,7 +234,35 @@ nav ul li a {
     transform: scale(1.1);
 }
 
+/* Responsive */
 @media (max-width: 768px) {
+    .hamburger-btn {
+        display: flex;
+        margin-top: 1rem;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #121216;
+        border-bottom: 2px solid #ff007f;
+        padding: 20px 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+        z-index: 999;
+    }
+
+    .nav-links li {
+        margin: 15px 0;
+        text-align: center;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
 
     .main-header h1 {
         font-size: 4.5rem;
@@ -195,7 +283,6 @@ nav ul li a {
 }
 
 @media screen and (max-width: 468px) {
-
     body::before,
     body::after {
         width: 10rem;
@@ -215,7 +302,7 @@ nav ul li a {
     }
 
     nav {
-       padding: 1.5rem 1rem;
+        padding: 1.5rem 1rem;
     }
 
     nav ul {
@@ -255,6 +342,7 @@ nav ul li a {
     .main-footer {
         padding: 30px 15px 15px 15px;
     }
+
     .footer-logo {
         font-size: 1.8rem;
     }

@@ -77,11 +77,14 @@ WSGI_APPLICATION = 'mi_sitio.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config (
-        default='postgresql://simulador_automotriz_user:P6v3CUn7Nk7RPmLXMvtjKUBEYJFGYfZm@dpg-d8qa61vavr4c73877q7g-a.virginia-postgres.render.com/simulador_automotriz',
-        conn_max_age=600,
-        ssl_require=True,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Eclipse',
+        'USER': 'postgres',
+        'PASSWORD': '40540369',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
 # Password validation
@@ -127,7 +130,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'no-reply@eclipsenightclub.com'
 
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend','mi_app.backends.EmailBackend']
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'c2280296.ferozo.com'

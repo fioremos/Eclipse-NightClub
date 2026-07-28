@@ -80,3 +80,16 @@ class ValidacionCodigoForm(forms.Form):
         required=True,
         widget=forms.TextInput(attrs={'placeholder': 'Ingresá el código provisto por la empresa'})
     )
+
+from django import forms
+from .models import ContenidoInicio
+
+class ContenidoInicioForm(forms.ModelForm):
+    class Meta:
+        model = ContenidoInicio
+        fields = ['titulo_principal', 'subtitulo', 'texto_bienvenida']
+        widgets = {
+            'titulo_principal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: ECLIPSE NIGHTCLUB'}),
+            'subtitulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: LA MEJOR EXPERIENCIA NOCTURNA'}),
+            'texto_bienvenida': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Escribe la presentación...'}),
+        }
