@@ -143,7 +143,7 @@ def contacto(request):
                 subject=asunto,
                 body=cuerpo_texto_plano,
                 from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'contacto@eclipse.com'),
-                to=['fimosca97@gmail.com']
+                to=['annavillegas@live.com.ar']
             )
             mensaje_mail.attach_alternative(cuerpo_html, "text/html")
 
