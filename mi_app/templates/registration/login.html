@@ -9,23 +9,44 @@
 <div class="auth-container">
     <h2 class="auth-title">Iniciar Sesión — Eclipse</h2>
 
-    {% if messages %}
-        {% for message in messages %}
-            <p class="auth-message">{{ message }}</p>
+{% if form.non_field_errors %}
+    <div class="auth-messages-wrapper">
+        {% for error in form.non_field_errors %}
+            <p class="auth-message error">{{ error }}</p>
         {% endfor %}
-    {% endif %}
+    </div>
+{% elif messages %}
+    <div class="auth-messages-wrapper">
+        {% for message in messages %}
+            <p class="auth-message {{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
 
     <form method="POST">
         {% csrf_token %}
 
         <div class="django-form-p">
-            {{ form.as_p }}
+           <p>
+                <label for="{{ form.username.id_for_label }}">Nombre de usuario:</label>
+                {{ form.username }}
+            </p>
+            <p>
+                <label for="{{ form.password.id_for_label }}">Contraseña:</label>
+                {{ form.password }}
+            </p>
         </div>
 
         <button type="submit" class="btn-submit">
             Ingresar al Sistema
         </button>
     </form>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <p class="auth-footer">
+            ¿Olvidaste tu contraseña? <a href="{% url 'olvide_password' %}" class="forgot-password-link"> Restablecela acá </a>
+        </p>
+    </div>
 
     <p class="auth-footer">
         ¿No tenés cuenta? <a href="{% url 'registro' %}" class="register-link">Registrate acá</a>

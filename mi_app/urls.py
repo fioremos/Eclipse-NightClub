@@ -17,5 +17,7 @@ urlpatterns = [
     path('panel-admin/editar/<int:pk>/', views.editar_consulta, name='editar_consulta'),
     path('panel-admin/eliminar/<int:pk>/', views.eliminar_consulta, name='eliminar_consulta'),
     path('panel-admin/cms/', views.cms_admin, name='cms_admin'),
+    path('olvide-password/', views.olvide_password_view, name='olvide_password'),
+    path('restablecer-password/<uidb64>/<token>/', views.restablecer_password_view, name='restablecer_password'),
 ]
 

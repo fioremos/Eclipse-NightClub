@@ -10,6 +10,14 @@ from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.urls import reverse_lazy
+from pathlib import Path
+
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMultiAlternatives
+import re
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,6 +27,35 @@ import requests
 from .forms import ContactoForm, RegistroDatosBasicosForm, ValidacionCodigoForm, ContenidoInicioForm
 from .models import SolicitudConsulta, UsuarioPermitido, ContenidoInicio
 from .serializers import SolicitudConsultaSerializer
+
+
+def _get_email_css():
+    css_path = Path(__file__).resolve().parent.parent / 'static' / 'css' / 'email_styles.css'
+    try:
+        return css_path.read_text(encoding='utf-8')
+    except FileNotFoundError:
+        return ''
+
+
+def _get_email_css_declarations(class_name):
+    css = _get_email_css()
+    match = re.search(rf"\.{re.escape(class_name)}\s*\{{([^}}]+)\}}", css, re.DOTALL)
+    if not match:
+        return ''
+    declarations = [decl.strip() for decl in match.group(1).split(';') if decl.strip()]
+    return '; '.join(declarations) + ';'
+
+
+def _render_email_html(content):
+    return f"""
+    <div style="{_get_email_css_declarations('email-outer')}">
+        <div style="{_get_email_css_declarations('email-wrapper')}">
+            <div style="{_get_email_css_declarations('email-card')}">
+                {content}
+            </div>
+        </div>
+    </div>
+    """
 
 
 # --- Vistas Principales del Sitio ---
@@ -59,33 +96,59 @@ def contacto(request):
         if form.is_valid():
             nueva_solicitud = form.save()
             categoria_actual = nueva_solicitud.categoria_asignada
-            cuerpo_mensaje = f"""
-                    Hola Anna,
+            nombre = form.cleaned_data.get('nombre_completo')
+            correo_cliente = form.cleaned_data.get('correo_electronico')
+            fecha_reserva = form.cleaned_data.get('fecha_reserva') or 'No aplica'
+            cantidad_personas = form.cleaned_data.get('cantidad_personas') or 'No aplica'
+            mensaje_usuario = form.cleaned_data.get('mensaje')
 
-                    Se ha registrado una nueva solicitud en la web de Eclipse Night Club.
-                    A continuación, te detallamos los datos cargados por el usuario:
+            cuerpo_texto_plano = f"""
+                        Nueva Solicitud en Eclipse NightClub
+                        ------------------------------------
+                        Categoría: {categoria_actual}
+                        Nombre: {nombre}
+                        Correo: {correo_cliente}
+                        Fecha Solicitada: {fecha_reserva}
+                        Cantidad de Personas: {cantidad_personas}
+                        Mensaje: {mensaje_usuario}
+                        """
 
-                    --------------------------------------------------
-                    Categoría Clasificada: {categoria_actual}
-                    Nombre Completo: {form.cleaned_data.get('nombre_completo')}
-                    Correo del Cliente: {form.cleaned_data.get('correo_electronico')}
-                    Fecha Solicitada: {form.cleaned_data.get('fecha_reserva') if form.cleaned_data.get('fecha_reserva') else 'No aplica'}
-                    Cantidad de Personas: {form.cleaned_data.get('cantidad_personas') if form.cleaned_data.get('cantidad_personas') else 'No aplica'}
-                    Mensaje / Consulta:
-                    {form.cleaned_data.get('mensaje')}
-                    --------------------------------------------------
+            cuerpo_html = _render_email_html(f"""
+                        <div style="{_get_email_css_declarations('email-header')}">
+                            <h1 style="{_get_email_css_declarations('email-title')}">ECLIPSE</h1>
+                            <h3 style="{_get_email_css_declarations('email-subtitle')}">NIGHT CLUB</h3>
+                        </div>
+                        <hr style="{_get_email_css_declarations('email-divider')}">
 
-                    Este registro ya se encuentra almacenado de forma segura en PostgreSQL.
-                    """
-            asunto = f"Nueva Solicitud Recibida — Categoría: {categoria_actual}"
+                        <h3 style="{_get_email_css_declarations('email-section-title')}">Nueva Solicitud Registrada</h3>
+
+                        <div style="{_get_email_css_declarations('email-info-box')}">
+                            <p style="{_get_email_css_declarations('email-text')}"><span style="{_get_email_css_declarations('email-label')}">Categoría:</span> {categoria_actual}</p>
+                            <p style="{_get_email_css_declarations('email-text')}"><span style="{_get_email_css_declarations('email-label')}">Nombre:</span> {nombre}</p>
+                            <p style="{_get_email_css_declarations('email-text')}"><span style="{_get_email_css_declarations('email-label')}">Email:</span> {correo_cliente}</p>
+                            <p style="{_get_email_css_declarations('email-text')}"><span style="{_get_email_css_declarations('email-label')}">Fecha Reserva:</span> {fecha_reserva}</p>
+                            <p style="{_get_email_css_declarations('email-text')}"><span style="{_get_email_css_declarations('email-label')}">Personas:</span> {cantidad_personas}</p>
+                            <hr style="border-color: #2a2a35; margin: 15px 0;">
+                            <p style="{_get_email_css_declarations('email-message')}"><strong>Mensaje:</strong> "{mensaje_usuario}"</p>
+                        </div>
+
+                        <p style="{_get_email_css_declarations('email-footer')}">
+                            Este registro fue almacenado correctamente en PostgreSQL.
+                        </p>
+                        """)
+
+            asunto = f"Nueva Solicitud — Categoría: {categoria_actual}"
+
+            mensaje_mail = EmailMultiAlternatives(
+                subject=asunto,
+                body=cuerpo_texto_plano,
+                from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'contacto@eclipse.com'),
+                to=['fimosca97@gmail.com']
+            )
+            mensaje_mail.attach_alternative(cuerpo_html, "text/html")
+
             try:
-                send_mail(
-                    subject=asunto,
-                    message=cuerpo_mensaje,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=['annavillegas@live.com.ar'],
-                    fail_silently=False,
-                )
+                mensaje_mail.send()
                 messages.success(request, "¡Tu solicitud fue enviada con éxito!")
             except Exception as e:
                 print(f"Error al enviar mail al administrador: {e}")
@@ -119,20 +182,49 @@ def registro_view(request):
 
                     enlace_validacion = request.build_absolute_uri(reverse('registro'))
                     asunto = "Validación de cuenta — Eclipse Night Club"
-                    mensaje = (
+                    cuerpo_texto_plano = (
                         f"Hola {usuario_autorizado.nombre},\n\n"
                         f"Para completar tu registro, ingresá al siguiente enlace:\n{enlace_validacion}\n\n"
                         f"Tu código de validación es: {usuario_autorizado.codigo_validation}\n\n"
                         f"Saludos,\nEquipo de Sistemas Eclipse."
                     )
 
-                    send_mail(
-                        asunto,
-                        mensaje,
-                        settings.DEFAULT_FROM_EMAIL,
-                        [email_ingresado],
-                        fail_silently=False,
+                    cuerpo_html = _render_email_html(f"""
+                                        <div style="{_get_email_css_declarations('email-header')}">
+                                            <h1 style="{_get_email_css_declarations('email-title')}">ECLIPSE</h1>
+                                            <h3 style="{_get_email_css_declarations('email-subtitle')}">NIGHT CLUB</h3>
+                                        </div>
+                                        <hr style="{_get_email_css_declarations('email-divider')}">
+
+                                        <p style="{_get_email_css_declarations('email-text')}; font-size: 16px;">Hola <strong style="{_get_email_css_declarations('email-label')}">{usuario_autorizado.nombre}</strong>,</p>
+                                        <p style="{_get_email_css_declarations('email-muted')}">Para completar el proceso de registro en el sistema administrativo de Eclipse Night Club, ingresá tu código de validación en la plataforma:</p>
+
+                                        <div style="{_get_email_css_declarations('email-code-box')}">
+                                            <span style="{_get_email_css_declarations('email-code-label')}">Tu Código de Validación</span>
+                                            <span style="{_get_email_css_declarations('email-code')}">{usuario_autorizado.codigo_validation}</span>
+                                        </div>
+
+                                        <div style="{_get_email_css_declarations('email-button-row')}">
+                                            <a href="{enlace_validacion}" style="{_get_email_css_declarations('email-button')}; {_get_email_css_declarations('email-button-pink')}">IR A LA PLATAFORMA</a>
+                                        </div>
+
+                                        <p style="{_get_email_css_declarations('email-footer')}">
+                                            Equipo de Sistemas — Eclipse Night Club
+                                        </p>
+                                        """)
+
+                    mensaje_mail = EmailMultiAlternatives(
+                        subject=asunto,
+                        body=cuerpo_texto_plano,
+                        from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@eclipse.com'),
+                        to=[email_ingresado]
                     )
+                    mensaje_mail.attach_alternative(cuerpo_html, "text/html")
+
+                    try:
+                        mensaje_mail.send()
+                    except Exception as e:
+                        print("Error al enviar mail de validación:", e)
 
                     messages.info(request, "Le llegará un correo para validar su cuenta.")
 
@@ -204,23 +296,82 @@ def home_view(request):
     return render(request, 'mi_app/home.html')
 
 
-class PersonalisedPasswordResetView(PasswordResetView):
-    template_name = 'registration/password_reset_form.html'
-    email_template_name = 'registration/password_reset_email.html'
-    subject_template_name = 'registration/password_reset_subject.txt'
-    success_url = reverse_lazy('password_reset_done')
+def olvide_password_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
 
-    def form_valid(self, form):
-        email = form.cleaned_data.get('email')
-        if not User.objects.filter(email=email).exists():
-            messages.error(
-                self.request,
-                "El correo electrónico ingresado no se encuentra registrado en nuestro sistema."
+        users = User.objects.filter(email=email)
+
+        if users.exists():
+            user = users.first()
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+
+            link_recuperacion = request.build_absolute_uri(
+                reverse('restablecer_password', kwargs={'uidb64': uid, 'token': token})
             )
-            return self.form_invalid(form)
 
-        messages.success(self.request, "Te hemos enviado un correo con las instrucciones.")
-        return super().form_valid(form)
+            cuerpo_html = _render_email_html(f"""
+                        <div style="{_get_email_css_declarations('email-header')}">
+                            <h1 style="{_get_email_css_declarations('email-title')}">ECLIPSE</h1>
+                            <h3 style="{_get_email_css_declarations('email-subtitle')}">NIGHT CLUB</h3>
+                        </div>
+                        <hr style="{_get_email_css_declarations('email-divider')}">
+                        <p style="{_get_email_css_declarations('email-text')}; font-size: 16px; margin-bottom: 10px;">
+                            Hola <strong style="{_get_email_css_declarations('email-label')}; display: inline;">{user.first_name or user.username}</strong>,
+                        </p>
+                        <p style="{_get_email_css_declarations('email-muted')}">Recibimos una solicitud para restablecer la contraseña de tu cuenta en Eclipse NightClub.</p>
+                        <div style="{_get_email_css_declarations('email-button-row')}">
+                            <a href="{link_recuperacion}" style="{_get_email_css_declarations('email-button')}; {_get_email_css_declarations('email-button-pink')}">RESTABLECER CONTRASEÑA</a>
+                        </div>
+                        <p style="{_get_email_css_declarations('email-footer')}">Si no solicitaste este cambio, podés ignorar este correo de forma segura.</p>
+                        """)
+
+            mensaje_mail = EmailMultiAlternatives(
+                subject="Restablecer Contraseña — Eclipse Night Club",
+                body=f"Para restablecer tu contraseña ingresá a: {link_recuperacion}",
+                from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@eclipse.com'),
+                to=[email]
+            )
+            mensaje_mail.attach_alternative(cuerpo_html, "text/html")
+
+            try:
+                mensaje_mail.send()
+            except Exception as e:
+                print("Error enviando mail:", e)
+
+            messages.success(request, "Te hemos enviado un correo con las instrucciones para restablecer tu clave.")
+            return redirect('login')
+        else:
+            messages.error(request, "El correo ingresado no corresponde a ningún usuario registrado.")
+            return render(request, 'registration/olvide_password.html')
+
+    return render(request, 'registration/olvide_password.html')
+
+def restablecer_password_view(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            pass1 = request.POST.get('password1')
+            pass2 = request.POST.get('password2')
+
+            if pass1 and pass1 == pass2:
+                user.set_password(pass1)
+                user.save()
+                messages.success(request, "¡Contraseña restablecida con éxito! Ya podés iniciar sesión.")
+                return redirect('login')
+            else:
+                messages.error(request, "Las contraseñas no coinciden o están vacías.")
+
+        return render(request, 'registration/nueva_password.html', {'validlink': True})
+    else:
+        messages.error(request, "El enlace de recuperación es inválido o ha expirado.")
+        return render(request, 'registration/nueva_password.html', {'validlink': False})
 
 # --- Panel de Administración del Cliente ---
 
@@ -230,10 +381,10 @@ def dashboard_admin(request):
 
     totales = {
         'total': solicitudes.count(),
-        'comercial': solicitudes.filter(categoria_asignada='Consulta Comercial').count(),
-        'tecnica': solicitudes.filter(categoria_asignada='Consulta Técnica').count(),
-        'rrhh': solicitudes.filter(categoria_asignada='Consulta de RRHH').count(),
-        'general': solicitudes.filter(categoria_asignada='Consulta General').count(),
+        'comercial': solicitudes.filter(categoria_asignada='Comercial').count(),
+        'tecnica': solicitudes.filter(categoria_asignada='Tecnica').count(),
+        'rrhh': solicitudes.filter(categoria_asignada='RRHH').count(),
+        'general': solicitudes.filter(categoria_asignada='General').count(),
     }
 
     return render(request, 'admin/dashboard.html', {

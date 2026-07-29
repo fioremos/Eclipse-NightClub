@@ -141,6 +141,96 @@ nav ul li a {
     background-color: #ff007f;
 }
 
+
+.messages-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 15px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Base de la Tarjeta de Alerta Neón */
+.alert-neon {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.4;
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Icono circular de la Alerta */
+.alert-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 0.85rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.alert-text {
+    flex: 1;
+}
+
+/* MENSAJE */
+
+.alert-neon.alert-success {
+    background: rgba(0, 245, 212, 0.08);
+    border: 1px solid #00f5d4;
+    color: #00f5d4;
+    box-shadow: 0 0 12px rgba(0, 245, 212, 0.25);
+}
+.alert-neon.alert-success .alert-icon {
+    background: #00f5d4;
+    color: #121216;
+}
+
+.alert-neon.alert-error,
+.alert-neon.alert-danger {
+    background: rgba(255, 0, 127, 0.08);
+    border: 1px solid var(--rosa);
+    color: var(--rosa);
+    box-shadow: 0 0 12px rgba(255, 0, 127, 0.25);
+}
+.alert-neon.alert-error .alert-icon,
+.alert-neon.alert-danger .alert-icon {
+    background: var(--rosa);
+    color: #ffffff;
+}
+
+.alert-neon.alert-info {
+    background: rgba(157, 78, 221, 0.1);
+    border: 1px solid var(--violeta);
+    color: #c77dff;
+    box-shadow: 0 0 12px rgba(157, 78, 221, 0.25);
+}
+.alert-neon.alert-info .alert-icon {
+    background: var(--violeta);
+    color: #ffffff;
+}
+
+.alert-neon.alert-warning {
+    background: rgba(255, 214, 10, 0.08);
+    border: 1px solid #ffd60a;
+    color: #ffd60a;
+    box-shadow: 0 0 12px rgba(255, 214, 10, 0.25);
+}
+.alert-neon.alert-warning .alert-icon {
+    background: #ffd60a;
+    color: #121216;
+}
+
 /* Footer */
 .main-footer {
     background-color: var(--oscuro);
