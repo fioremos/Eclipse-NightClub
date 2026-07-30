@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'mi_sitio.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Eclipse',
-        'USER': 'postgres',
-        'PASSWORD': '40540369',
+        'NAME': 'eclipse',
+        'USER': 'eclipse_user',
+        'PASSWORD': '123456789',
         'HOST': 'localhost',
         'PORT': '5432',
     }

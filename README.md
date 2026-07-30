@@ -15,12 +15,12 @@ pip install -r requirements.txt
 Crear una base de datos local en PostgreSQL:
 
 ```sql
-CREATE DATABASE eclipse;
-CREATE USER eclipse_user WITH PASSWORD 'tu_password';
+CREATE USER eclipse_user WITH PASSWORD '123456789';
 ALTER ROLE eclipse_user SET client_encoding TO 'utf8';
 ALTER ROLE eclipse_user SET default_transaction_isolation TO 'read committed';
 ALTER ROLE eclipse_user SET timezone TO 'UTC';
 GRANT ALL PRIVILEGES ON DATABASE eclipse TO eclipse_user;
+ALTER USER eclipse_user WITH SUPERUSER;
 ```
 
 Luego, en el archivo [mi_sitio/settings.py](mi_sitio/settings.py), ajustar los valores de conexión de la base de datos:
